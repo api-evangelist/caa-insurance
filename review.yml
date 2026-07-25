@@ -1,0 +1,291 @@
+aid: caa-insurance
+name: CAA Insurance
+review:
+  question: Does CAA Insurance publish a public, self-serve developer portal or API?
+  answer: false
+  date: '2026-07-25'
+  reviewer: API Evangelist
+  homeMarket: Canada
+  tier: carrier-pc
+  gated: true
+  openapiHarvested: false
+  specsCount: 0
+findings:
+  summary: |
+    CAA Insurance Company publishes no public API and no developer portal. It is a
+    Canadian personal-lines property and casualty carrier (auto and property),
+    underwriting since 1974 as part of CAA Club Group, selling in BC, SK, MB, ON,
+    NB, NS, and PE through a direct-to-consumer channel and independent brokers.
+
+    The assigned primary domain caainsurancecompany.com is a 301 redirect to the
+    operating domain caainsurancecompany.ca. Every conventional developer host and
+    path was probed on both domains and none exist: developer., developers., docs.,
+    and api. subdomains all fail DNS resolution, and /developers, /api, /developer,
+    /partners, /integrations, /brokers all return 404 on caainsurancecompany.ca.
+    Spec-discovery paths (/openapi.json, /swagger.json, /api-docs, /spec, /redoc,
+    /docs, /swagger, /swagger-ui.html, /v1/openapi.json, /graphql,
+    /.well-known/apis.json) all return 404. There is no robots.txt (404) though
+    sitemap.xml does serve (200, 83 URLs) and contains no developer, API, or
+    integration page.
+
+    The only integration surface is broker-gated. broker.caainsurance.com (200) is a
+    Sitecore marketing microsite for the broker program, segmented by region
+    (Ontario, Manitoba & Saskatchewan, Atlantic), whose content is business
+    development and marketing support only — named Business Development Managers,
+    print and email marketing assets, training sessions. It documents no technical
+    connectivity whatsoever. Its "Login to Portal" link points at
+    caabrokerportal.ca, which 302s to https://www.caabrokerportal.ca/ and then
+    federates to https://ccgexternalid.ciamlogin.com/ (Microsoft Entra External ID
+    CIAM) over WS-Federation with wtrealm=urn:sharepoint:federation — i.e. a
+    SharePoint broker workspace behind a corporate identity provider. That is a
+    login wall, not a developer portal.
+
+    Consumer surfaces are hosted web applications, not APIs: quoting runs at
+    car-insurance.caainsurancecompany.com/auto/intro (200) and
+    property-insurance.caainsurancecompany.com/property/intro (200), and the customer
+    self-service portal portal.caainsurancecompany.ca 301s to
+    customer.caainsurancecompany.ca (200), a Next.js app that redirects any
+    unauthenticated request — including /.well-known/openid-configuration — to
+    /sign-in. No OIDC or OAuth authorization-server metadata is served anonymously
+    on any CAA host probed.
+
+    No public GitHub organization exists for the company. No public Postman
+    workspace or collection was found. No GraphQL surface, no gRPC/.proto, no
+    AsyncAPI or event catalog, and no webhook documentation — the absence of any
+    event surface is itself the finding.
+
+    This record is a faithful representation of the Canadian carrier tier. Canada has
+    no open-insurance mandate: OSFI supervises federally-regulated insurers
+    prudentially while provincial regulators (FSRA in Ontario, the AMF in Quebec)
+    govern market conduct, and Consumer-Driven Banking explicitly excludes insurance.
+    With no forcing function, a mid-size personal-lines carrier like CAA Insurance
+    exposes nothing publicly and moves broker business through a gated portal.
+  acordPosture: no ACORD reference found
+  acordNote: |
+    ACORD, AL3, ACORD XML, NGDS, IVANS, agency download, Applied Epic, Policy Works,
+    Vertafore, and Compu-Quote were all searched for across caainsurancecompany.ca
+    (homepage, about, faq, partner, sitemap) and across broker.caainsurance.com
+    (root, Ontario, Atlantic, Manitoba_Saskatchewan, plus their Support, Products,
+    Faq, and The-Difference pages). Not one of those terms appears in any public
+    page. Note that in Canada the relevant standards body is CSIO (Centre for Study
+    of Insurance Operations), whose XML standards are ACORD-derived; CSIO is likewise
+    never named publicly by CAA Insurance. Whatever broker connectivity exists sits
+    behind the caabrokerportal.ca login and is not publicly described.
+  insuranceVerbs:
+    quote:
+      exposedAsAPI: false
+      note: Quoting exists only as hosted consumer web applications at
+        car-insurance.caainsurancecompany.com and
+        property-insurance.caainsurancecompany.com. No documented quote or rating API.
+    bind:
+      exposedAsAPI: false
+      note: Binding happens in the consumer quote flow or through a broker; no public
+        bind API.
+    issue:
+      exposedAsAPI: false
+      note: Policy issuance and administration are internal; no public policy
+        administration API.
+    fnol:
+      exposedAsAPI: false
+      note: Claims are reported by phone and web form via /claims-and-inquires. No
+        FNOL API, no claims API.
+    audience: none-public
+  authModel:
+    publicAPIAuth: none
+    brokerPortal:
+      scheme: WS-Federation / SAML-style federation to Microsoft Entra External ID (CIAM)
+      identityProvider: https://ccgexternalid.ciamlogin.com/018aba37-21fa-4b10-9382-01cdc448ba66/wsfed
+      relyingParty: urn:sharepoint:federation
+      note: Observed live on the redirect chain from http://www.caabrokerportal.ca/.
+    customerPortal:
+      scheme: Application session login (Next.js /sign-in); no anonymous OIDC discovery
+      note: /.well-known/openid-configuration on customer.caainsurancecompany.ca
+        307s into /sign-in rather than serving discovery metadata.
+  webhooks:
+    documented: false
+    asyncapi: false
+    note: No event catalog, webhook documentation, or AsyncAPI document published.
+  postman:
+    public: false
+  graphql:
+    public: false
+  grpc:
+    public: false
+  developerPortal:
+    url: ''
+    confirmed: false
+    classification: none — no developer portal of any kind exists; the nearest
+      surfaces are a marketing broker microsite and a partner login wall
+  transports:
+  - protocol: HTTPS web application
+    scheme: https
+    documented: true
+    note: Consumer quote and self-service applications. Human-facing, not an API.
+  - protocol: REST
+    documented: false
+    note: No public REST API is documented on any CAA Insurance host.
+  - protocol: GraphQL
+    documented: false
+  - protocol: gRPC
+    documented: false
+  - protocol: WebSocket
+    documented: false
+  - protocol: AsyncAPI/events
+    documented: false
+probes:
+- url: https://caainsurancecompany.com/
+  status: 301
+  note: Redirects to https://caainsurancecompany.ca/
+- url: https://www.caainsurancecompany.com/
+  status: 301
+  note: Redirects to https://caainsurancecompany.ca/
+- url: https://caainsurancecompany.ca/
+  status: 200
+  note: Operating site (Next.js).
+- url: https://developer.caainsurancecompany.com/
+  status: 0
+  note: DNS does not resolve.
+- url: https://developers.caainsurancecompany.com/
+  status: 0
+  note: DNS does not resolve.
+- url: https://docs.caainsurancecompany.com/
+  status: 0
+  note: DNS does not resolve.
+- url: https://api.caainsurancecompany.com/
+  status: 0
+  note: DNS does not resolve.
+- url: https://developer.caainsurancecompany.ca/
+  status: 0
+  note: DNS does not resolve.
+- url: https://developers.caainsurancecompany.ca/
+  status: 0
+  note: DNS does not resolve.
+- url: https://docs.caainsurancecompany.ca/
+  status: 0
+  note: DNS does not resolve.
+- url: https://api.caainsurancecompany.ca/
+  status: 0
+  note: DNS does not resolve.
+- url: https://caainsurancecompany.ca/developers
+  status: 404
+- url: https://caainsurancecompany.ca/developer
+  status: 404
+- url: https://caainsurancecompany.ca/api
+  status: 404
+- url: https://caainsurancecompany.ca/partners
+  status: 404
+- url: https://caainsurancecompany.ca/integrations
+  status: 404
+- url: https://caainsurancecompany.ca/brokers
+  status: 404
+- url: https://caainsurancecompany.ca/openapi.json
+  status: 404
+- url: https://caainsurancecompany.ca/swagger.json
+  status: 404
+- url: https://caainsurancecompany.ca/v1/openapi.json
+  status: 404
+- url: https://caainsurancecompany.ca/api-docs
+  status: 404
+- url: https://caainsurancecompany.ca/spec
+  status: 404
+- url: https://caainsurancecompany.ca/redoc
+  status: 404
+- url: https://caainsurancecompany.ca/docs
+  status: 404
+- url: https://caainsurancecompany.ca/swagger
+  status: 404
+- url: https://caainsurancecompany.ca/swagger-ui.html
+  status: 404
+- url: https://caainsurancecompany.ca/graphql
+  status: 404
+- url: https://caainsurancecompany.ca/.well-known/apis.json
+  status: 404
+- url: https://caainsurancecompany.ca/.well-known/openid-configuration
+  status: 404
+- url: https://caainsurancecompany.ca/.well-known/oauth-authorization-server
+  status: 404
+- url: https://caainsurancecompany.ca/.well-known/security.txt
+  status: 404
+- url: https://caainsurancecompany.ca/robots.txt
+  status: 404
+- url: https://caainsurancecompany.ca/sitemap.xml
+  status: 200
+  note: 83 URLs; contains no developer, API, or integration page.
+- url: https://caainsurancecompany.ca/partner
+  status: 200
+  note: Broker partnership marketing page. No API, integration, ACORD, CSIO, or EDI
+    content.
+- url: https://broker.caainsurance.com/
+  status: 200
+  note: Broker program microsite (Sitecore), region selector. Marketing only.
+- url: https://broker.caainsurance.com/Ontario
+  status: 200
+  note: Broker program content; no technical connectivity described.
+- url: https://broker.caainsurance.com/en/Ontario/Support
+  status: 200
+  note: Business Development Manager contacts and marketing assets only.
+- url: https://broker.caainsurance.com/robots.txt
+  status: 200
+  note: Disallows /sitecore; points to /sitemaps/broker-sitemap.xml.
+- url: http://www.caabrokerportal.ca/
+  status: 302
+  note: Redirects to https://www.caabrokerportal.ca/ then to
+    ccgexternalid.ciamlogin.com WS-Federation sign-in. LOGIN WALL.
+- url: https://portal.caainsurancecompany.ca/
+  status: 301
+  note: Redirects to https://customer.caainsurancecompany.ca/
+- url: https://customer.caainsurancecompany.ca/
+  status: 200
+  note: Customer self-service portal; all routes gated behind /sign-in.
+- url: https://customer.caainsurancecompany.ca/.well-known/openid-configuration
+  status: 307
+  note: Redirects to /sign-in rather than serving OIDC discovery metadata.
+- url: https://car-insurance.caainsurancecompany.com/auto/intro
+  status: 200
+  note: Consumer auto quote web application.
+- url: https://property-insurance.caainsurancecompany.com/property/intro
+  status: 200
+  note: Consumer property quote web application.
+- url: https://car-insurance.caainsurancecompany.com/openapi.json
+  status: 404
+- url: https://car-insurance.caainsurancecompany.com/swagger.json
+  status: 404
+- url: https://car-insurance.caainsurancecompany.com/api-docs
+  status: 404
+- url: https://property-insurance.caainsurancecompany.com/openapi.json
+  status: 404
+- url: https://property-insurance.caainsurancecompany.com/swagger.json
+  status: 404
+- url: https://caainsurance.com/
+  status: 0
+  note: Connection times out at the apex; only the broker. host on this domain responds.
+sources:
+- url: https://caainsurancecompany.ca/
+  type: Website
+  note: Product lines, provinces served, links to broker portal and quote applications.
+- url: https://caainsurancecompany.ca/about
+  type: About
+  note: Operating since 1974; head office 60 Commerce Valley Drive East, Thornhill,
+    Ontario; auto and property underwritten by CAA Insurance Company; CAA trademarks
+    owned by the Canadian Automobile Association.
+- url: https://caainsurancecompany.ca/partner
+  type: Documentation
+  note: Broker partnership value proposition. Confirms no technical integration
+    program is publicly described.
+- url: https://broker.caainsurance.com/Ontario
+  type: Portal
+  note: Broker program microsite; "Login to Portal" points at caabrokerportal.ca.
+- url: https://broker.caainsurance.com/en/Ontario/Support
+  type: Support
+  note: Support is relationship-based (BDMs, marketing, training), not technical.
+- url: https://caainsurancecompany.ca/sitemap.xml
+  type: Metadata
+  note: Full public URL inventory; no developer or API surface present.
+actions:
+  apisListed: 0
+  openapiDirectoryCreated: false
+  reason: |
+    No public API, no developer portal, and no downloadable specification exists, so
+    apis[] is intentionally empty and no openapi/ directory was created. Recording
+    the absence accurately — partner-gated broker portal, no ACORD or CSIO reference,
+    no exposed quote/bind/issue/FNOL verbs — is the correct outcome for this record.

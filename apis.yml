@@ -1,0 +1,74 @@
+aid: caa-insurance
+url: https://raw.githubusercontent.com/api-evangelist/caa-insurance/refs/heads/main/apis.yml
+name: CAA Insurance
+kind: company
+description: >-
+  CAA Insurance Company is a Canadian property and casualty carrier that
+  began underwriting in 1974 and is part of CAA Club Group, the CAA South Central
+  Ontario federation, with its head office at 60 Commerce Valley Drive East in
+  Thornhill, Ontario. It underwrites personal-lines auto insurance (including
+  accident benefits, the CAA MyPace pay-as-you-drive product, CAA Connect telematics,
+  and antique and classic vehicle coverage) and personal property insurance
+  (homeowners, condominium, and tenant), plus optional endorsements such as tire
+  coverage, home equipment breakdown, service line, renewable energy equipment,
+  and legal expense coverage. It sells in British Columbia, Saskatchewan, Manitoba,
+  Ontario, New Brunswick, Nova Scotia, and Prince Edward Island through a
+  direct-to-consumer channel and through independent brokers. Its API posture is
+  honestly none: as of the July 2026 review there is no public developer portal, no
+  self-serve API program, no downloadable OpenAPI or Swagger definition, and no
+  published event or webhook catalog. Every developer-style host and path probed
+  (developer/developers/docs/api subdomains, and /developers, /api, /developer,
+  /partners, /integrations on both caainsurancecompany.com and caainsurancecompany.ca)
+  either failed DNS or returned 404. The only integration surface is the CAA Broker
+  Portal at caabrokerportal.ca, which is a Microsoft Entra External ID (CIAM)
+  WS-Federation login wall in front of a SharePoint broker workspace, and the
+  broker program microsite at broker.caainsurance.com, which is marketing and
+  business-development content only. Consumer quoting runs through hosted web
+  applications rather than an exposed quote API. This is a representative record of
+  the Canadian carrier tier, where there is no open-insurance mandate — OSFI
+  supervises prudentially, provincial regulators such as FSRA and the AMF handle
+  market conduct, and Consumer-Driven Banking excludes insurance entirely — so
+  carriers face no forcing function to publish anything.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Insurance
+- Canada
+- Property and Casualty
+- Auto Insurance
+- Home Insurance
+- Carrier
+- Broker
+- Personal Lines
+- Telematics
+- Partner Gated
+- No Public API
+created: '2026-07-25'
+modified: '2026-07-25'
+specificationVersion: '0.19'
+apis: []
+common:
+- type: Website
+  url: https://caainsurancecompany.ca/
+- type: About
+  url: https://caainsurancecompany.ca/about
+- type: Blog
+  url: https://caainsurancecompany.ca/blog
+- type: FAQ
+  url: https://caainsurancecompany.ca/faq
+- type: Support
+  url: https://caainsurancecompany.ca/claims-and-inquires
+- type: Login
+  url: https://customer.caainsurancecompany.ca/
+- type: PartnerPortal
+  url: https://www.caabrokerportal.ca/
+- type: Portal
+  url: https://broker.caainsurance.com/
+- type: Privacy
+  url: https://caainsurancecompany.ca/privacy
+- type: Terms
+  url: https://caainsurancecompany.ca/terms-of-use
+- type: LinkedIn
+  url: https://www.linkedin.com/company/caa-insurance-company/
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
