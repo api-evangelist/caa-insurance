@@ -20,6 +20,17 @@ Canada has no open-insurance mandate — OSFI supervises federally-regulated ins
 
 See [review.yml](review.yml) for the full probe log, HTTP statuses, and sources.
 
+## Enrichment round — 2026-07-25
+
+The "no public API" finding stands, but a deeper contract hunt turned up machine-readable descriptions that are **platform-provided, not CAA-authored**:
+
+- **20 SharePoint SOAP WSDLs, 199 operations, served anonymously.** The broker portal `www.caabrokerportal.ca` (TLS certificate issued to *CAA South Central Ontario Systems and Services Inc.*) runs Microsoft SharePoint `16.0.0.5552` on IIS 10 and serves WSDL 1.1 at `/_vti_bin/<service>.asmx?WSDL` for Sites, Webs, UserGroup, WebPartPages, SiteData, Meetings, Imaging, Dws, search/spsearch, Views, Permissions, RecordsRepository, Versions, People, Copy, Alerts, Forms, Authentication, and PublishedLinksService. Harvested verbatim to [`wsdl/`](wsdl/_index.yml). **Not one is an insurance operation** — no quote, bind, issue, or FNOL exists here either; it is document/list/site collaboration, and every data call is authenticated.
+- **SharePoint REST/OData present but gated.** `/_api/web` returns `403 System.UnauthorizedAccessException` as `application/json;odata=verbose`.
+- **OpenID Connect discovery is real and anonymous.** The Microsoft Entra External ID (CIAM) tenant behind the broker sign-in publishes standards-compliant discovery (scopes `openid profile email offline_access`, mTLS-bound access tokens, RS256). Saved to [`well-known/`](well-known/caa-insurance-well-known.yml).
+- **Still absent:** `security.txt`, `llms.txt`, RFC 8414 metadata, any vulnerability-disclosure programme, any trust center, any first-party package on npm/PyPI/any registry, DNSSEC, and CAA DNS records.
+
+Artifacts added this round: [`wsdl/`](wsdl/_index.yml), [`well-known/`](well-known/caa-insurance-well-known.yml), [`authentication/`](authentication/caa-insurance-authentication.yml), [`scopes/`](scopes/caa-insurance-scopes.yml), [`conformance/`](conformance/caa-insurance-conformance.yml), [`conventions/`](conventions/caa-insurance-conventions.yml), [`errors/`](errors/caa-insurance-problem-types.yml), [`security/`](security/caa-insurance-domain-security.yml), [`llms/`](llms/caa-insurance-llms.txt).
+
 ## Tags
 
 - Insurance
@@ -52,7 +63,7 @@ None. CAA Insurance exposes no public, documented API.
 - [Support](https://caainsurancecompany.ca/claims-and-inquires)
 - [Login](https://customer.caainsurancecompany.ca/)
 - [Partner Portal](https://www.caabrokerportal.ca/)
-- [Portal](https://broker.caainsurance.com/)
+- [Partners](https://broker.caainsurance.com/) — broker program microsite (marketing, not a developer portal)
 - [Privacy](https://caainsurancecompany.ca/privacy)
 - [Terms of Service](https://caainsurancecompany.ca/terms-of-use)
 - [LinkedIn](https://www.linkedin.com/company/caa-insurance-company/)

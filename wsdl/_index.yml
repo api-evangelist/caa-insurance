@@ -1,0 +1,133 @@
+generated: '2026-07-25'
+method: searched
+source: https://www.caabrokerportal.ca/_vti_bin/<service>.asmx?WSDL
+spec_type: WSDL 1.1
+note: >-
+  CAA Insurance publishes no API program of its own. However the CAA Broker
+  Portal at www.caabrokerportal.ca — a host whose TLS certificate is issued to
+  "CAA South Central Ontario Systems and Services Inc." — runs Microsoft
+  SharePoint (MicrosoftSharePointTeamServices 16.0.0.5552, Microsoft-IIS/10.0)
+  and serves the standard SharePoint SOAP web-service WSDL documents
+  anonymously at /_vti_bin/<service>.asmx?WSDL. Twenty WSDL documents covering
+  199 operations were harvested verbatim on 2026-07-25. IMPORTANT SCOPE NOTE:
+  these are platform-provided Microsoft product contracts, not a CAA-authored
+  insurance API — there is no quote, bind, issue, or FNOL operation anywhere in
+  them, and every data operation requires an authenticated SharePoint session
+  (the sibling REST/OData surface at /_api/web returns HTTP 403
+  System.UnauthorizedAccessException anonymously). The contracts are recorded
+  because they are the only machine-readable API description reachable in the
+  CAA Insurance estate, and because they define exactly what the broker
+  integration surface is: document/list/site collaboration, not insurance
+  transactions.
+surface:
+  host: https://www.caabrokerportal.ca
+  base_path: /_vti_bin/
+  transport: SOAP 1.1 and SOAP 1.2 over HTTPS
+  platform: Microsoft SharePoint Server 16.0.0.5552
+  authentication: WS-Federation to Microsoft Entra External ID (CIAM); WSDL anonymous, all operations gated
+  rest_sibling:
+    path: /_api/web
+    status: 403
+    note: SharePoint REST/OData (odata=verbose) present but anonymously denied.
+  anonymously_denied:
+  - path: /_vti_bin/lists.asmx?WSDL
+    status: 403
+services:
+- file: caa-insurance-sharepoint-sites.wsdl
+  service: Sites
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/sites.asmx
+  operations: 10
+  operation_ids: [CreateWeb, DeleteWeb, ExportSolution, ExportWeb, GetSite, GetSiteTemplates, GetUpdatedFormDigest, GetUpdatedFormDigestInformation, ImportWeb, IsScriptSafeUrl]
+- file: caa-insurance-sharepoint-webs.wsdl
+  service: Webs
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/webs.asmx
+  operations: 21
+  operation_ids: [CreateContentType, CustomizeCss, DeleteContentType, GetActivatedFeatures, GetAllSubWebCollection, GetColumns, GetContentType, GetContentTypes, GetCustomizedPageStatus, GetListTemplates, GetObjectIdFromUrl, GetWeb, GetWebCollection, RemoveContentTypeXmlDocument, RevertAllFileContentStreams, RevertCss, RevertFileContentStream, UpdateColumns, UpdateContentType, UpdateContentTypeXmlDocument, WebUrlFromPageUrl]
+- file: caa-insurance-sharepoint-usergroup.wsdl
+  service: UserGroup
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/usergroup.asmx
+  operations: 44
+  operation_ids: [AddGroup, AddGroupToRole, AddRole, AddRoleDef, AddUserCollectionToGroup, AddUserCollectionToRole, AddUserToGroup, AddUserToRole, GetAllUserCollectionFromWeb, GetCurrentUserInfo, GetGroupCollection, GetGroupCollectionFromRole, GetGroupCollectionFromSite, GetGroupCollectionFromUser, GetGroupCollectionFromWeb, GetGroupInfo, GetRoleCollection, GetRoleCollectionFromGroup, GetRoleCollectionFromUser, GetRoleCollectionFromWeb, GetRoleInfo, GetRolesAndPermissionsForCurrentUser, GetRolesAndPermissionsForSite, GetUserCollection, GetUserCollectionFromGroup, GetUserCollectionFromRole, GetUserCollectionFromSite, GetUserCollectionFromWeb, GetUserInfo, GetUserLoginFromEmail, RemoveGroup, RemoveGroupFromRole, RemoveRole, RemoveUserCollectionFromGroup, RemoveUserCollectionFromRole, RemoveUserCollectionFromSite, RemoveUserFromGroup, RemoveUserFromRole, RemoveUserFromSite, RemoveUserFromWeb, UpdateGroupInfo, UpdateRoleDefInfo, UpdateRoleInfo, UpdateUserInfo]
+- file: caa-insurance-sharepoint-webpartpages.wsdl
+  service: WebPartPagesWebService
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/webpartpages.asmx
+  operations: 28
+- file: caa-insurance-sharepoint-sitedata.wsdl
+  service: SiteData
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/sitedata.asmx
+  operations: 14
+  operation_ids: [EnumerateFolder, GetAttachments, GetChanges, GetChangesEx, GetContent, GetContentEx, GetList, GetListCollection, GetListItems, GetSite, GetSiteAndWeb, GetSiteUrl, GetURLSegments, GetWeb]
+- file: caa-insurance-sharepoint-meetings.wsdl
+  service: Meetings
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/meetings.asmx
+  operations: 12
+- file: caa-insurance-sharepoint-imaging.wsdl
+  service: Imaging
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/imaging.asmx
+  operations: 11
+- file: caa-insurance-sharepoint-dws.wsdl
+  service: Dws
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/dws.asmx
+  operations: 11
+- file: caa-insurance-sharepoint-search.wsdl
+  service: QueryService
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/search.asmx
+  operations: 8
+  operation_ids: [GetPortalSearchInfo, GetQuerySuggestions, GetSearchMetadata, Query, QueryEx, RecordClick, Registration, Status]
+- file: caa-insurance-sharepoint-views.wsdl
+  service: Views
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/views.asmx
+  operations: 8
+- file: caa-insurance-sharepoint-permissions.wsdl
+  service: Permissions
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/permissions.asmx
+  operations: 6
+  operation_ids: [AddPermission, AddPermissionCollection, GetPermissionCollection, RemovePermission, RemovePermissionCollection, UpdatePermission]
+- file: caa-insurance-sharepoint-officialfile.wsdl
+  service: RecordsRepository
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/officialfile.asmx
+  operations: 5
+  operation_ids: [GetFinalRoutingDestinationFolderUrl, GetRecordRouting, GetRecordRoutingCollection, GetServerInfo, SubmitFile]
+- file: caa-insurance-sharepoint-spsearch.wsdl
+  service: QueryService
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/spsearch.asmx
+  operations: 4
+- file: caa-insurance-sharepoint-versions.wsdl
+  service: Versions
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/versions.asmx
+  operations: 4
+  operation_ids: [DeleteAllVersions, DeleteVersion, GetVersions, RestoreVersion]
+- file: caa-insurance-sharepoint-people.wsdl
+  service: People
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/people.asmx
+  operations: 3
+  operation_ids: [IsClaimsMode, ResolvePrincipals, SearchPrincipals]
+- file: caa-insurance-sharepoint-copy.wsdl
+  service: Copy
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/copy.asmx
+  operations: 3
+  operation_ids: [CopyIntoItems, CopyIntoItemsLocal, GetItem]
+- file: caa-insurance-sharepoint-alerts.wsdl
+  service: Alerts
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/alerts.asmx
+  operations: 2
+  operation_ids: [DeleteAlerts, GetAlerts]
+- file: caa-insurance-sharepoint-forms.wsdl
+  service: Forms
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/forms.asmx
+  operations: 2
+  operation_ids: [GetForm, GetFormCollection]
+- file: caa-insurance-sharepoint-authentication.wsdl
+  service: Authentication
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/authentication.asmx
+  operations: 2
+  operation_ids: [Login, Mode]
+- file: caa-insurance-sharepoint-publishedlinksservice.wsdl
+  service: PublishedLinksService
+  endpoint: https://www.caabrokerportal.ca/_vti_bin/publishedlinksservice.asmx
+  operations: 1
+  operation_ids: [GetLinks]
+coverage:
+  services: 20
+  operations: 199
+  insurance_operations: 0

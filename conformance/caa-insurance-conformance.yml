@@ -1,0 +1,102 @@
+generated: '2026-07-25'
+method: derived
+source: >-
+  derived from wsdl/_index.yml, well-known/caa-insurance-openid-configuration.json,
+  security/caa-insurance-domain-security.yml and live probes 2026-07-25
+note: >-
+  Conformance is asserted only about surfaces that were actually observed. CAA
+  Insurance makes no published standards claims of its own; the conformant
+  surfaces below are all platform-provided (Microsoft SharePoint SOAP/OData and
+  Microsoft Entra External ID). The insurance-specific standards are the
+  meaningful negatives: no ACORD, no CSIO, no NGDS/IVANS reference exists on any
+  public CAA page, and Canada has no open-insurance mandate to force one.
+standards:
+- id: wsdl-1.1
+  conforms: true
+  evidence: 20 WSDL 1.1 documents served anonymously at /_vti_bin/*.asmx?WSDL (wsdl/_index.yml)
+- id: soap-1.1
+  conforms: true
+  evidence: soap:binding transport http://schemas.xmlsoap.org/soap/http in every harvested WSDL
+- id: soap-1.2
+  conforms: true
+  evidence: soap12:binding present in every harvested WSDL
+- id: xml-schema
+  conforms: true
+  evidence: inline s:schema type definitions in every harvested WSDL
+- id: odata
+  conforms: true
+  evidence: >-
+    /_api/web responds with content-type application/json;odata=verbose (HTTP
+    403 anonymously) — SharePoint REST/OData v3 surface present but gated
+- id: openid-connect-discovery
+  conforms: true
+  evidence: well-known/caa-insurance-openid-configuration.json served anonymously by the CAA Club Group CIAM tenant
+- id: oauth2
+  conforms: true
+  evidence: authorization, token, device-code and logout endpoints advertised in the OIDC discovery document
+- id: rfc8705-mtls-bound-tokens
+  conforms: true
+  evidence: tls_client_certificate_bound_access_tokens true; mtls_endpoint_aliases.token_endpoint advertised
+- id: ws-federation
+  conforms: true
+  evidence: caabrokerportal.ca federates to ccgexternalid.ciamlogin.com/.../wsfed with wtrealm=urn:sharepoint:federation
+- id: rfc6797-hsts
+  conforms: true
+  evidence: >-
+    strict-transport-security present on caainsurancecompany.ca (max-age
+    63072000; includeSubDomains; preload), customer.caainsurancecompany.ca,
+    caabrokerportal.ca and both quote applications
+- id: rfc7208-spf
+  conforms: true
+  evidence: 'v=spf1 include:spf.caasco.ca include:spf.protection.outlook.com -all on caainsurancecompany.ca'
+- id: rfc7489-dmarc
+  conforms: true
+  evidence: 'DMARC record published for caainsurancecompany.ca via dmarc-report.com; p=none (monitor only)'
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on every CAA host
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: false
+  evidence: /.well-known/oauth-authorization-server 404 on the CIAM tenant and on all CAA hosts
+- id: dnssec
+  conforms: false
+  evidence: no DS records for caainsurancecompany.ca, caainsurancecompany.com, or caabrokerportal.ca
+- id: rfc8659-caa
+  conforms: false
+  evidence: no CAA DNS records on any CAA-operated domain
+- id: openapi
+  conforms: false
+  evidence: no OpenAPI/Swagger document at any probed path on any host
+- id: asyncapi
+  conforms: false
+  evidence: no event, streaming, or webhook surface published
+- id: graphql
+  conforms: false
+  evidence: /graphql returns 404
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    the only observable error envelope is the SharePoint OData
+    {"error":{"code":..,"message":{"lang":..,"value":..}}} shape, not
+    application/problem+json
+- id: acord
+  conforms: false
+  evidence: >-
+    ACORD, AL3, ACORD XML, NGDS, IVANS, agency download never appear on
+    caainsurancecompany.ca or broker.caainsurance.com
+- id: csio
+  conforms: false
+  evidence: >-
+    CSIO (the Canadian ACORD-derived standards body) is never named publicly by
+    CAA Insurance; any broker connectivity sits behind the caabrokerportal.ca
+    login
+- id: fhir-r4
+  conforms: false
+- id: psd2
+  conforms: false
+  evidence: not applicable — Canadian P&C carrier; Consumer-Driven Banking excludes insurance
+compliance_program:
+  published: false
+  note: >-
+    No trust center, no SOC 2 / ISO 27001 / PCI DSS certification page, and no
+    published compliance posture was found on any CAA Insurance host.

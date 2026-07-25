@@ -1,0 +1,64 @@
+generated: '2026-07-25'
+method: derived
+source: >-
+  derived from wsdl/_index.yml, authentication/caa-insurance-authentication.yml,
+  errors/caa-insurance-problem-types.yml and live probes 2026-07-25
+note: >-
+  CAA Insurance publishes no API guidelines, so these conventions are read off
+  the only machine-readable surface in the estate: the Microsoft SharePoint SOAP
+  and OData endpoints on the CAA Broker Portal. They describe the platform's
+  semantics, not a CAA API contract, and no consumer-facing convention
+  (idempotency keys, cursor pagination, request-id tracing, rate-limit headers)
+  is documented anywhere.
+authentication:
+  style: WS-Federation sign-in to Microsoft Entra External ID (CIAM), then SharePoint session
+  developer_credentials: none
+  reference: authentication/caa-insurance-authentication.yml
+transport:
+  protocols: [SOAP 1.1, SOAP 1.2, HTTPS]
+  content_types: [text/xml, application/soap+xml, 'application/json;odata=verbose']
+  tls: TLSv1.2 on caabrokerportal.ca; TLSv1.3 on caainsurancecompany.ca and both quote applications
+idempotency:
+  supported: false
+  note: >-
+    No idempotency key header or parameter exists on any observed surface. SOAP
+    write operations (AddMeeting, AddWebPart, SubmitFile, AddUserToGroup, …) are
+    not idempotent and SharePoint requires a form digest
+    (GetUpdatedFormDigest) rather than a client-supplied idempotency key.
+form_digest:
+  required: true
+  operation: GetUpdatedFormDigest
+  note: >-
+    SharePoint's CSRF equivalent — a server-issued, expiring digest that write
+    calls must carry. It is a replay guard, not an idempotency contract.
+pagination:
+  style: none-documented
+  note: >-
+    List/query operations (GetListItems, Query, QueryEx, GetUserCollection…)
+    take service-specific query XML rather than a uniform pagination contract.
+versioning:
+  scheme: platform-version
+  current: MicrosoftSharePointTeamServices 16.0.0.5552
+  note: >-
+    Announced in the response headers of every caabrokerportal.ca request. There
+    is no CAA-published API version, no version header, and no version path.
+request_tracing:
+  header: SPRequestGuid
+  note: SharePoint emits a per-request correlation GUID on every response.
+error_envelope:
+  soap: SOAP Fault
+  rest: '{"error":{"code":"<hresult>, <ExceptionType>","message":{"lang":"en-US","value":"<text>"}}}'
+  reference: errors/caa-insurance-problem-types.yml
+rate_limiting:
+  documented: false
+  headers_observed: [X-SharePointHealthScore]
+  note: >-
+    SharePoint's health-score header is a server-load throttling signal, not a
+    published rate-limit contract; no X-RateLimit-* headers were observed.
+events:
+  webhooks: false
+  asyncapi: false
+  note: >-
+    The SharePoint Alerts service (GetAlerts/DeleteAlerts) is a subscription
+    surface for portal users, gated behind authentication; no outbound webhook
+    or event catalog is published.

@@ -1,0 +1,62 @@
+generated: '2026-07-25'
+method: derived
+source: >-
+  live probes 2026-07-25 of caabrokerportal.ca, customer.caainsurancecompany.ca
+  and caainsurancecompany.ca; wsdl/_index.yml
+format: soap-fault + sharepoint-odata-error
+note: >-
+  CAA Insurance publishes no error reference. This catalog records the error
+  responses actually observed on the estate's hosts — chiefly the SharePoint
+  OData error envelope returned to anonymous callers on the broker portal, plus
+  the redirect-to-sign-in behaviour of the customer portal, which returns HTTP
+  200 HTML rather than a 401 and therefore breaks any programmatic client that
+  trusts status codes. Not RFC 9457: no application/problem+json is served
+  anywhere.
+envelope:
+  soap: SOAP 1.1 / 1.2 Fault (faultcode, faultstring, detail) as declared in the harvested WSDLs
+  rest: '{"error":{"code":"<hresult>, <ExceptionType>","message":{"lang":"en-US","value":"<text>"}}}'
+problems:
+- status: 403
+  surface: https://www.caabrokerportal.ca/_api/web
+  code: '-2147024891, System.UnauthorizedAccessException'
+  title: Access denied
+  detail: You do not have permission to perform this action or access this resource.
+  content_type: application/json;odata=verbose
+  remediation: Authenticate through the WS-Federation sign-in; the broker portal grants no anonymous access.
+  observed: '2026-07-25'
+- status: 403
+  surface: https://www.caabrokerportal.ca/_vti_bin/lists.asmx?WSDL
+  title: WSDL withheld
+  detail: >-
+    The Lists service alone refuses to serve its WSDL anonymously, while the
+    other twenty SharePoint services do.
+  observed: '2026-07-25'
+- status: 403
+  surface: https://www.caabrokerportal.ca/
+  title: Forbidden to non-browser clients
+  detail: >-
+    The portal root returns 403 to a default curl user agent and 200 to a
+    browser user agent — a bot/user-agent filter in front of the sign-in
+    redirect.
+  observed: '2026-07-25'
+- status: 500
+  surface: https://www.caabrokerportal.ca/.well-known/security.txt
+  title: Server error on unmapped well-known path
+  detail: SharePoint returns 500 rather than 404 for /.well-known/ paths.
+  observed: '2026-07-25'
+- status: 307
+  surface: https://customer.caainsurancecompany.ca/*
+  title: Redirect to sign-in instead of 401
+  detail: >-
+    Every unauthenticated request, including /.well-known/openid-configuration,
+    307s to /sign-in?callbackUrl=... and then returns HTTP 200 with the Next.js
+    sign-in HTML. Programmatic callers see a 200 HTML page, never a 401.
+  remediation: Treat any 200 text/html from this host as unauthenticated.
+  observed: '2026-07-25'
+- status: 404
+  surface: https://caainsurancecompany.ca/*
+  title: Not found
+  detail: >-
+    All developer, spec, and well-known paths return a 404 HTML page; there is
+    no machine-readable error body on the marketing site.
+  observed: '2026-07-25'

@@ -1,0 +1,43 @@
+generated: '2026-07-25'
+method: searched
+source: well-known/caa-insurance-openid-configuration.json
+docs: https://ccgexternalid.ciamlogin.com/018aba37-21fa-4b10-9382-01cdc448ba66/v2.0/.well-known/openid-configuration
+note: >-
+  CAA Insurance exposes no API and therefore no API authorization scopes. The
+  only scope surface observable anywhere in the estate is the standard OpenID
+  Connect scope set advertised by the Microsoft Entra External ID (CIAM) tenant
+  that authenticates the CAA Broker Portal and CAA Club Group sign-in. These are
+  identity scopes for signing a human in, not delegated permissions over
+  insurance data — no quote, policy, billing, or claims scope exists publicly.
+surface: identity-provider
+schemes:
+- name: EntraExternalIdCIAM
+  type: openIdConnect
+  source: well-known/caa-insurance-openid-configuration.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://ccgexternalid.ciamlogin.com/018aba37-21fa-4b10-9382-01cdc448ba66/oauth2/v2.0/authorize
+    tokenUrl: https://ccgexternalid.ciamlogin.com/018aba37-21fa-4b10-9382-01cdc448ba66/oauth2/v2.0/token
+  - flow: deviceCode
+    deviceAuthorizationUrl: https://ccgexternalid.ciamlogin.com/018aba37-21fa-4b10-9382-01cdc448ba66/oauth2/v2.0/devicecode
+    tokenUrl: https://ccgexternalid.ciamlogin.com/018aba37-21fa-4b10-9382-01cdc448ba66/oauth2/v2.0/token
+scopes:
+- scope: openid
+  description: Sign the user in and issue an ID token.
+  flows: [authorizationCode, deviceCode]
+  sources: [well-known/caa-insurance-openid-configuration.json]
+- scope: profile
+  description: Basic profile claims (name, preferred_username).
+  flows: [authorizationCode, deviceCode]
+  sources: [well-known/caa-insurance-openid-configuration.json]
+- scope: email
+  description: The user's email claim.
+  flows: [authorizationCode, deviceCode]
+  sources: [well-known/caa-insurance-openid-configuration.json]
+- scope: offline_access
+  description: Issue a refresh token so the session can be renewed without re-prompting.
+  flows: [authorizationCode, deviceCode]
+  sources: [well-known/caa-insurance-openid-configuration.json]
+business_scopes:
+  published: false
+  note: No quote, bind, policy, billing, or claims scope is published by CAA Insurance.

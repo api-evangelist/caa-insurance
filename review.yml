@@ -60,6 +60,48 @@ findings:
     govern market conduct, and Consumer-Driven Banking explicitly excludes insurance.
     With no forcing function, a mid-size personal-lines carrier like CAA Insurance
     exposes nothing publicly and moves broker business through a gated portal.
+  enrichment:
+    date: '2026-07-25'
+    round: 'Enrichment 2026-07-25'
+    verdict: >-
+      The "no public API" answer stands: CAA Insurance authors no API, publishes no
+      developer portal, and offers no developer credential. The enrichment round
+      did, however, find machine-readable contracts the first pass missed, all of
+      them platform-provided rather than CAA-authored.
+    findings:
+    - The CAA Broker Portal (www.caabrokerportal.ca, TLS certificate issued to
+      "CAA South Central Ontario Systems and Services Inc.") runs Microsoft
+      SharePoint, announced as MicrosoftSharePointTeamServices 16.0.0.5552 on
+      Microsoft-IIS/10.0.
+    - Twenty SharePoint SOAP WSDL 1.1 documents are served ANONYMOUSLY at
+      /_vti_bin/<service>.asmx?WSDL — 199 operations across Sites, Webs,
+      UserGroup, WebPartPages, SiteData, Meetings, Imaging, Dws, search/spsearch,
+      Views, Permissions, RecordsRepository, Versions, People, Copy, Alerts,
+      Forms, Authentication, and PublishedLinksService. Harvested verbatim to
+      wsdl/. Not one is an insurance operation; there is still no quote, bind,
+      issue, or FNOL surface.
+    - The SharePoint REST/OData sibling at /_api/web exists and returns HTTP 403
+      System.UnauthorizedAccessException with content-type
+      application/json;odata=verbose to anonymous callers. /_vti_bin/lists.asmx?WSDL
+      is the one service that withholds its WSDL (403).
+    - The portal root returns 403 to a default curl user agent and 200 to a browser
+      user agent — a bot filter sits in front of the WS-Federation sign-in redirect.
+    - The Microsoft Entra External ID (CIAM) tenant that fronts the broker portal
+      serves standards-compliant OpenID Connect discovery anonymously at
+      ccgexternalid.ciamlogin.com/018aba37-21fa-4b10-9382-01cdc448ba66/v2.0/.well-known/openid-configuration
+      (scopes openid, profile, email, offline_access; mTLS-bound access tokens
+      supported; RFC 8414 oauth-authorization-server metadata is 404). Saved to
+      well-known/.
+    - No /.well-known/security.txt, no llms.txt, no vulnerability disclosure
+      programme, no bug bounty, and no trust center exist on any CAA host. The
+      200s previously seen on customer.caainsurancecompany.ca/.well-known/* are
+      307 redirects into the Next.js /sign-in HTML shell, not documents.
+    - No first-party package exists on npm, PyPI, or any other registry.
+    - >-
+      DNS/TLS posture probed across five hosts and four domains — HSTS everywhere
+      (63072000 with preload on the .ca sites), TLS 1.3 on the consumer estate and
+      TLS 1.2 on the SharePoint portal, but no DNSSEC and no CAA records on any
+      domain; SPF everywhere and DMARC at p=none (monitor only).
   acordPosture: no ACORD reference found
   acordNote: |
     ACORD, AL3, ACORD XML, NGDS, IVANS, agency download, Applied Epic, Policy Works,

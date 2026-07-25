@@ -1,0 +1,271 @@
+
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/">
+      <s:element name="SubmitFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="fileToSubmit" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="properties" type="tns:ArrayOfRecordsRepositoryProperty" />
+            <s:element minOccurs="0" maxOccurs="1" name="recordRouting" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sourceUrl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFinalRoutingDestinationFolderUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="properties" type="tns:ArrayOfRecordsRepositoryProperty" />
+            <s:element minOccurs="0" maxOccurs="1" name="contentTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="originalSaveLocation" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRecordsRepositoryProperty">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RecordsRepositoryProperty" type="tns:RecordsRepositoryProperty" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RecordsRepositoryProperty">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Other" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SubmitFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SubmitFileResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFinalRoutingDestinationFolderUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFinalRoutingDestinationFolderUrlResult" type="tns:DocumentRoutingResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element> 
+      <s:complexType name="DocumentRoutingResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DocumentRoutingResultType" type="tns:DocumentRoutingResultType" />
+          <s:element minOccurs="0" maxOccurs="1" name="DocumentRoutingCollisionSetting" type="tns:DocumentRoutingCollisionSetting" />          
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="DocumentRoutingResultType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Success" />
+          <s:enumeration value="SuccessToDropOffLibrary" />
+          <s:enumeration value="MissingRequiredProperties" />
+          <s:enumeration value="DocumentRoutingDisabled" />
+          <s:enumeration value="PermissionDeniedAtDestination" />
+          <s:enumeration value="ParsingDisabledAtDestination" />
+          <s:enumeration value="OriginalSaveLocationIsDocumentSet" />
+          <s:enumeration value="NoEnforcementAtOriginalSaveLocation" />
+          <s:enumeration value="UnknownFailure" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="DocumentRoutingCollisionSetting">
+        <s:restriction base="s:string">
+          <s:enumeration value="NoCollision" />
+          <s:enumeration value="UseSharePointVersioning" />
+          <s:enumeration value="AppendUniqueSuffixes" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetServerInfo">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetServerInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetServerInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecordRoutingCollection">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetRecordRoutingCollectionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRecordRoutingCollectionResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecordRouting">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="recordRouting" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecordRoutingResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRecordRoutingResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="SubmitFileSoapIn">
+    <wsdl:part name="parameters" element="tns:SubmitFile" />
+  </wsdl:message>
+  <wsdl:message name="SubmitFileSoapOut">
+    <wsdl:part name="parameters" element="tns:SubmitFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFinalRoutingDestinationFolderUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFinalRoutingDestinationFolderUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetFinalRoutingDestinationFolderUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFinalRoutingDestinationFolderUrlResponse" />
+  </wsdl:message>  
+  <wsdl:message name="GetServerInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetServerInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetServerInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetServerInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRecordRoutingCollectionSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRecordRoutingCollection" />
+  </wsdl:message>
+  <wsdl:message name="GetRecordRoutingCollectionSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRecordRoutingCollectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRecordRoutingSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRecordRouting" />
+  </wsdl:message>
+  <wsdl:message name="GetRecordRoutingSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRecordRoutingResponse" />
+  </wsdl:message>
+  <wsdl:portType name="RecordsRepositorySoap">
+    <wsdl:operation name="SubmitFile">
+      <wsdl:input message="tns:SubmitFileSoapIn" />
+      <wsdl:output message="tns:SubmitFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFinalRoutingDestinationFolderUrl">
+      <wsdl:input message="tns:GetFinalRoutingDestinationFolderUrlSoapIn" />
+      <wsdl:output message="tns:GetFinalRoutingDestinationFolderUrlSoapOut" />
+    </wsdl:operation>    
+    <wsdl:operation name="GetServerInfo">
+      <wsdl:input message="tns:GetServerInfoSoapIn" />
+      <wsdl:output message="tns:GetServerInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecordRoutingCollection">
+      <wsdl:input message="tns:GetRecordRoutingCollectionSoapIn" />
+      <wsdl:output message="tns:GetRecordRoutingCollectionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecordRouting">
+      <wsdl:input message="tns:GetRecordRoutingSoapIn" />
+      <wsdl:output message="tns:GetRecordRoutingSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RecordsRepositorySoap" type="tns:RecordsRepositorySoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="SubmitFile">
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/SubmitFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFinalRoutingDestinationFolderUrl">
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/GetFinalRoutingDestinationFolderUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>    
+    <wsdl:operation name="GetServerInfo">
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/GetServerInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecordRoutingCollection">
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/GetRecordRoutingCollection" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecordRouting">
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/GetRecordRouting" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="RecordsRepositorySoap12" type="tns:RecordsRepositorySoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="SubmitFile">
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/SubmitFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFinalRoutingDestinationFolderUrl">
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/GetFinalRoutingDestinationFolderUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>    
+    <wsdl:operation name="GetServerInfo">
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/GetServerInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecordRoutingCollection">
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/GetRecordRoutingCollection" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecordRouting">
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/recordsrepository/GetRecordRouting" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+    <wsdl:service name="RecordsRepository">
+    <wsdl:port name="RecordsRepositorySoap" binding="tns:RecordsRepositorySoap">
+      <soap:address location="https://www.caabrokerportal.ca/_vti_bin/officialfile.asmx" />
+    </wsdl:port>
+    <wsdl:port name="RecordsRepositorySoap12" binding="tns:RecordsRepositorySoap12">
+      <soap12:address location="https://www.caabrokerportal.ca/_vti_bin/officialfile.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,90 @@
+generated: '2026-07-25'
+method: searched
+source: live probes of every CAA Insurance host in apis.yml plus the identity provider it federates to
+note: >-
+  No CAA-operated host serves a /.well-known/ document. The only anonymously
+  served discovery document in the CAA Insurance estate belongs to the Microsoft
+  Entra External ID (CIAM) tenant that fronts the CAA Broker Portal sign-in;
+  that tenant is operated for CAA Club Group and its issuer/endpoints are
+  recorded here because it is the real identity surface behind the gated broker
+  workspace. Every 200 observed on customer.caainsurancecompany.ca is the
+  Next.js sign-in HTML shell reached through a 307 redirect, not a discovery
+  document — those are recorded with the redirect status, not as hits.
+hosts:
+- host: https://caainsurancecompany.ca
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/ai.txt
+    status: 404
+  - path: /.well-known/dnt-policy.txt
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /security.txt
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: https://customer.caainsurancecompany.ca
+  note: >-
+    Next.js customer self-service portal. Every /.well-known/ path 307s to
+    /sign-in?callbackUrl=... and returns the sign-in HTML shell with HTTP 200 —
+    there is no discovery metadata served anonymously.
+  documents:
+  - path: /.well-known/security.txt
+    status: 307
+    redirect: /sign-in?callbackUrl=%2F.well-known%2Fsecurity.txt
+  - path: /.well-known/openid-configuration
+    status: 307
+    redirect: /sign-in
+  - path: /.well-known/oauth-authorization-server
+    status: 307
+    redirect: /sign-in
+  - path: /llms.txt
+    status: 307
+    redirect: /sign-in
+- host: https://broker.caainsurance.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: https://www.caabrokerportal.ca
+  note: SharePoint (MicrosoftSharePointTeamServices 16.0.0.5552) on Microsoft-IIS/10.0.
+  documents:
+  - path: /.well-known/security.txt
+    status: 500
+- host: https://car-insurance.caainsurancecompany.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /robots.txt
+    status: 404
+- host: https://ccgexternalid.ciamlogin.com/018aba37-21fa-4b10-9382-01cdc448ba66
+  note: >-
+    Microsoft Entra External ID (CIAM) tenant used by CAA Club Group; the
+    WS-Federation relying party for the CAA Broker Portal
+    (wtrealm=urn:sharepoint:federation) and the only anonymous discovery
+    document found anywhere in the estate.
+  documents:
+  - path: /v2.0/.well-known/openid-configuration
+    status: 200
+    file: caa-insurance-openid-configuration.json
+  - path: /.well-known/openid-configuration
+    status: 200
+    note: same document as the /v2.0/ path
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /v2.0/.well-known/oauth-authorization-server
+    status: 404
+security_txt:
+  published: false
+  note: No RFC 9116 security.txt is served on any CAA Insurance host.

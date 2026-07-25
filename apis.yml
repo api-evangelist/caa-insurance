@@ -23,8 +23,14 @@ description: >-
   Portal at caabrokerportal.ca, which is a Microsoft Entra External ID (CIAM)
   WS-Federation login wall in front of a SharePoint broker workspace, and the
   broker program microsite at broker.caainsurance.com, which is marketing and
-  business-development content only. Consumer quoting runs through hosted web
-  applications rather than an exposed quote API. This is a representative record of
+  business-development content only. The one machine-readable contract anywhere in
+  the estate is platform-provided rather than authored by CAA: the broker portal
+  runs Microsoft SharePoint 16.0.0.5552 and serves twenty SOAP WSDL documents
+  (199 operations, none of them insurance operations) anonymously at
+  /_vti_bin/<service>.asmx?WSDL, with its REST/OData sibling at /_api/web
+  returning 403 to anonymous callers; the CAA Club Group Entra External ID tenant
+  likewise serves standard OpenID Connect discovery. Consumer quoting runs through
+  hosted web applications rather than an exposed quote API. This is a representative record of
   the Canadian carrier tier, where there is no open-insurance mandate — OSFI
   supervises prudentially, provincial regulators such as FSRA and the AMF handle
   market conduct, and Consumer-Driven Banking excludes insurance entirely — so
@@ -47,6 +53,28 @@ modified: '2026-07-25'
 specificationVersion: '0.19'
 apis: []
 common:
+- type: DomainSecurity
+  url: security/caa-insurance-domain-security.yml
+- type: WSDL
+  name: CAA Broker Portal SharePoint SOAP services (gated, platform-provided)
+  url: wsdl/_index.yml
+- type: Authentication
+  url: authentication/caa-insurance-authentication.yml
+- type: OpenIDConnect
+  name: Microsoft Entra External ID (CIAM) discovery for the CAA Club Group tenant
+  url: well-known/caa-insurance-openid-configuration.json
+- type: OAuthScopes
+  url: scopes/caa-insurance-scopes.yml
+- type: WellKnown
+  url: well-known/caa-insurance-well-known.yml
+- type: Conformance
+  url: conformance/caa-insurance-conformance.yml
+- type: Conventions
+  url: conventions/caa-insurance-conventions.yml
+- type: ErrorCatalog
+  url: errors/caa-insurance-problem-types.yml
+- type: LLMsTxt
+  url: llms/caa-insurance-llms.txt
 - type: Website
   url: https://caainsurancecompany.ca/
 - type: About
@@ -61,11 +89,11 @@ common:
   url: https://customer.caainsurancecompany.ca/
 - type: PartnerPortal
   url: https://www.caabrokerportal.ca/
-- type: Portal
+- type: Partners
   url: https://broker.caainsurance.com/
-- type: Privacy
+- type: PrivacyPolicy
   url: https://caainsurancecompany.ca/privacy
-- type: Terms
+- type: TermsOfService
   url: https://caainsurancecompany.ca/terms-of-use
 - type: LinkedIn
   url: https://www.linkedin.com/company/caa-insurance-company/
