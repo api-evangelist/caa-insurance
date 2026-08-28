@@ -35,6 +35,17 @@ description: >-
   supervises prudentially, provincial regulators such as FSRA and the AMF handle
   market conduct, and Consumer-Driven Banking excludes insurance entirely — so
   carriers face no forcing function to publish anything.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Insurance
