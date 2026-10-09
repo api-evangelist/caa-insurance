@@ -52,6 +52,9 @@ accessModel:
   trial: false
   try_now: false
   public: false
+  gated: partner
+  gated_source:
+  - tag:Partner Gated
   label: Self-serve signup
   confidence: medium
   source:
@@ -70,8 +73,6 @@ tags:
 - Carrier
 - Personal Lines
 - Telematics
-- Partner Gated
-- No Public API
 tags_raw:
 - Insurance
 - Canada
@@ -81,8 +82,6 @@ tags_raw:
 - Carrier
 - Personal Lines
 - Telematics
-- Partner Gated
-- No Public API
 created: '2026-07-25'
 modified: '2026-07-25'
 specificationVersion: '0.23'
@@ -137,3 +136,5 @@ maintainers:
   email: kin@apievangelist.com
 x-tags-removed:
 - Brokers
+- No Public API
+- Partner Gated
