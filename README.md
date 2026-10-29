@@ -1,4 +1,4 @@
-# CAA Insurance (caa-insurance)
+# CAA Insurance
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,74 +64,90 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-CAA Insurance Company is a Canadian property and casualty carrier that began underwriting in 1974 and is part of CAA Club Group, with its head office in Thornhill, Ontario. It underwrites personal-lines auto insurance (accident benefits, the CAA MyPace pay-as-you-drive product, CAA Connect telematics, antique and classic vehicles) and personal property insurance (homeowners, condominium, tenant), plus optional endorsements including tire coverage, home equipment breakdown, service line, renewable energy equipment, and legal expense coverage. It sells in British Columbia, Saskatchewan, Manitoba, Ontario, New Brunswick, Nova Scotia, and Prince Edward Island, direct to consumers and through independent brokers.
+CAA Insurance Company is a Canadian property and casualty carrier that began underwriting in 1974 and is part of CAA Club Group, the CAA South Central Ontario federation, with its head office at 60 Commerce Valley Drive East in Thornhill, Ontario. It underwrites personal-lines auto insurance (including accident benefits, the CAA MyPace pay-as-you-drive product, CAA Connect telematics, and antique and classic vehicle coverage) and personal property insurance (homeowners, condominium, and tenant), plus optional endorsements such as tire coverage, home equipment breakdown, service line, renewable energy equipment, and legal expense coverage. It sells in British Columbia, Saskatchewan, Manitoba, Ontario, New Brunswick, Nova Scotia, and Prince Edward Island through a direct-to-consumer channel and through independent brokers. Its API posture is honestly none: as of the July 2026 review there is no public developer portal, no self-serve API program, no downloadable OpenAPI or Swagger definition, and no published event or webhook catalog. Every developer-style host and path probed (developer/developers/docs/api subdomains, and /developers, /api, /developer, /partners, /integrations on both caainsurancecompany.com and caainsurancecompany.ca) either failed DNS or returned 404. The only integration surface is the CAA Broker Portal at caabrokerportal.ca, which is a Microsoft Entra External ID (CIAM) WS-Federation login wall in front of a SharePoint broker workspace, and the broker program microsite at broker.caainsurance.com, which is marketing and business-development content only. The one machine-readable contract anywhere in the estate is platform-provided rather than authored by CAA: the broker portal runs Microsoft SharePoint 16.0.0.5552 and serves twenty SOAP WSDL documents (199 operations, none of them insurance operations) anonymously at /_vti_bin/<service>.asmx?WSDL, with its REST/OData sibling at /_api/web returning 403 to anonymous callers; the CAA Club Group Entra External ID tenant likewise serves standard OpenID Connect discovery. Consumer quoting runs through hosted web applications rather than an exposed quote API. This is a representative record of the Canadian carrier tier, where there is no open-insurance mandate — OSFI supervises prudentially, provincial regulators such as FSRA and the AMF handle market conduct, and Consumer-Driven Banking excludes insurance entirely — so carriers face no forcing function to publish anything.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/caa-insurance/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/caa-insurance/refs/heads/main/apis.yml)
+**Areas:** Insurance · Canada · Property and Casualty · Auto Insurance · Home Insurance · Carrier · Personal Lines · Telematics
 
-## API Posture
+## CAA Insurance on APIs.io
 
-CAA Insurance publishes **no public API and no developer portal**. This is recorded as an honest absence, not an oversight.
+Everything profiled for CAA Insurance is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/caa-insurance/](https://apis.io/providers/caa-insurance/)** — or go straight to one of the APIs or properties below.
 
-- **Developer portal:** none. The `developer.`, `developers.`, `docs.`, and `api.` subdomains do not resolve on either `caainsurancecompany.com` or `caainsurancecompany.ca`, and `/developers`, `/developer`, `/api`, `/partners`, `/integrations`, and `/brokers` all return `404`.
-- **OpenAPI / Swagger:** none. Every spec-discovery path probed (`/openapi.json`, `/swagger.json`, `/v1/openapi.json`, `/api-docs`, `/spec`, `/redoc`, `/docs`, `/swagger`, `/swagger-ui.html`) returns `404`. No specification was harvested.
-- **Broker integration surface:** partner-gated. [broker.caainsurance.com](https://broker.caainsurance.com/) is a marketing microsite for the broker program, segmented by region, describing business-development support rather than connectivity. Its "Login to Portal" link leads to `caabrokerportal.ca`, which federates to Microsoft Entra External ID (CIAM) over WS-Federation into a SharePoint broker workspace — a login wall.
-- **ACORD posture:** no ACORD reference found. Neither ACORD, AL3, ACORD XML, NGDS, IVANS, agency download, Applied, Policy Works, nor Vertafore appears on any public page. Canada's ACORD-derived standards body, CSIO, is likewise never named publicly.
-- **Quote / bind / issue / FNOL:** none exposed as an API. Quoting is a hosted consumer web application; claims are reported by phone and web form.
-- **Auth model:** no public API authentication exists. The broker portal uses WS-Federation to Entra External ID; the customer portal is a session-login web app that does not serve OIDC discovery anonymously.
-- **Webhooks / events / GraphQL / gRPC / Postman:** none published.
+### Published properties
 
-Canada has no open-insurance mandate — OSFI supervises federally-regulated insurers prudentially, provincial regulators such as FSRA and the AMF govern market conduct, and Consumer-Driven Banking excludes insurance entirely. With no forcing function, this posture is representative of the Canadian personal-lines carrier tier.
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-See [review.yml](review.yml) for the full probe log, HTTP statuses, and sources.
+#### Security (2)
 
-## Enrichment round — 2026-07-25
+Authentication, trust centre, and vulnerability disclosure.
 
-The "no public API" finding stands, but a deeper contract hunt turned up machine-readable descriptions that are **platform-provided, not CAA-authored**:
+- [Caa Insurance Authentication](https://apis.io/security/caa-insurance/caa-insurance-authentication/)
+- [Caa Insurance Domain Security](https://apis.io/security/caa-insurance/caa-insurance-domain-security/)
 
-- **20 SharePoint SOAP WSDLs, 199 operations, served anonymously.** The broker portal `www.caabrokerportal.ca` (TLS certificate issued to *CAA South Central Ontario Systems and Services Inc.*) runs Microsoft SharePoint `16.0.0.5552` on IIS 10 and serves WSDL 1.1 at `/_vti_bin/<service>.asmx?WSDL` for Sites, Webs, UserGroup, WebPartPages, SiteData, Meetings, Imaging, Dws, search/spsearch, Views, Permissions, RecordsRepository, Versions, People, Copy, Alerts, Forms, Authentication, and PublishedLinksService. Harvested verbatim to [`wsdl/`](wsdl/_index.yml). **Not one is an insurance operation** — no quote, bind, issue, or FNOL exists here either; it is document/list/site collaboration, and every data call is authenticated.
-- **SharePoint REST/OData present but gated.** `/_api/web` returns `403 System.UnauthorizedAccessException` as `application/json;odata=verbose`.
-- **OpenID Connect discovery is real and anonymous.** The Microsoft Entra External ID (CIAM) tenant behind the broker sign-in publishes standards-compliant discovery (scopes `openid profile email offline_access`, mTLS-bound access tokens, RS256). Saved to [`well-known/`](well-known/caa-insurance-well-known.yml).
-- **Still absent:** `security.txt`, `llms.txt`, RFC 8414 metadata, any vulnerability-disclosure programme, any trust center, any first-party package on npm/PyPI/any registry, DNSSEC, and CAA DNS records.
+#### OAuth scopes (1)
 
-Artifacts added this round: [`wsdl/`](wsdl/_index.yml), [`well-known/`](well-known/caa-insurance-well-known.yml), [`authentication/`](authentication/caa-insurance-authentication.yml), [`scopes/`](scopes/caa-insurance-scopes.yml), [`conformance/`](conformance/caa-insurance-conformance.yml), [`conventions/`](conventions/caa-insurance-conventions.yml), [`errors/`](errors/caa-insurance-problem-types.yml), [`security/`](security/caa-insurance-domain-security.yml), [`llms/`](llms/caa-insurance-llms.txt).
+The permissions the API asks for.
 
-## Tags
+- [Caa Insurance Scopes](https://apis.io/scopes/caa-insurance/caa-insurance-scopes/)
 
-- Insurance
-- Canada
-- Property and Casualty
-- Auto Insurance
-- Home Insurance
-- Carrier
-- Broker
-- Personal Lines
-- Telematics
-- Partner Gated
-- No Public API
+## Where to find this API
 
-## Timestamps
-
-- **Created:** 2026-07-25
-- **Modified:** 2026-07-25
-
-## APIs
-
-None. CAA Insurance exposes no public, documented API.
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://caainsurancecompany.ca/)
-- [About](https://caainsurancecompany.ca/about)
-- [Blog](https://caainsurancecompany.ca/blog)
-- [FAQ](https://caainsurancecompany.ca/faq)
 - [Support](https://caainsurancecompany.ca/claims-and-inquires)
-- [Login](https://customer.caainsurancecompany.ca/)
-- [Partner Portal](https://www.caabrokerportal.ca/)
-- [Partners](https://broker.caainsurance.com/) — broker program microsite (marketing, not a developer portal)
-- [Privacy](https://caainsurancecompany.ca/privacy)
-- [Terms of Service](https://caainsurancecompany.ca/terms-of-use)
-- [LinkedIn](https://www.linkedin.com/company/caa-insurance-company/)
+- [Blog](https://caainsurancecompany.ca/blog)
+- [Terms of service](https://caainsurancecompany.ca/terms-of-use)
+- [Privacy policy](https://caainsurancecompany.ca/privacy)
 
-## Maintainers
+## API Evangelist rating
 
-- Kin Lane — kin@apievangelist.com
+**Kin Score 25.0** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 48.2 |
+| Contract quality | 29.3 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 19.0 |
+| Access clarity | 27.6 |
+
+**Agent readiness 20.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 36.8** — Insurance
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/caa-insurance/](https://apis.io/providers/caa-insurance/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for CAA Insurance: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/caa-insurance/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
